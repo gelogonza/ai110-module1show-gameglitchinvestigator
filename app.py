@@ -1,5 +1,6 @@
 import random
 import streamlit as st
+from logic_utils import is_in_range
 
 # fixed changed the hard and normal to be be the correct ranges
 def get_range_for_difficulty(difficulty: str):
@@ -124,16 +125,16 @@ if st.session_state.status != "playing":
     else:
         st.error("Game over. Start a new game to try again.")
     st.stop()
-
+# fix: added range validation to check if input is within range
 if submit:
-    st.session_state.attempts += 1
-
     ok, guess_int, err = parse_guess(raw_guess)
 
     if not ok:
-        st.session_state.history.append(raw_guess)
         st.error(err)
+    elif not is_in_range(guess_int, low, high):
+        st.error(f"{guess_int} isn't within range. Please enter a number between {low} and {high}.")
     else:
+        st.session_state.attempts += 1
         st.session_state.history.append(guess_int)
 
         outcome, message = check_guess(guess_int, st.session_state.secret)
