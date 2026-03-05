@@ -8,6 +8,15 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - List at least two concrete bugs you noticed at the start  
   (for example: "the secret number kept changing" or "the hints were backwards").
 
+- One bug i noticed was the notification letting you know to go higher or lower was incorrect. It would say go lower even if i got to 1, which was incorrect. 
+- another thing i noticed was that upon clicking new game, it wouldnt actually start a new game. 
+- the press enter to apply also doesnt work correctly because when i press enter it doesnt actually apply.
+- another thing is if i change the difficulty it doesnt actually change the range of numbers either, so for easy ifs supposed to be 1 to 20, but it stays at 1 to 100(normal difficulty).
+- easy should also be 1 to 20 ( correct )
+- normal should be 1 to 50 ( incorrect )
+- hard should be 1 to 100 ( incorrect )
+- normal and hard should be switched
+
 ---
 
 ## 2. How did you use AI as a teammate?
