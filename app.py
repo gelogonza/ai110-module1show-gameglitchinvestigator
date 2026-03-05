@@ -1,7 +1,7 @@
 import random
 import streamlit as st
 
-# fixed
+# fixed changed the hard and normal to be be the correct ranges
 def get_range_for_difficulty(difficulty: str):
     if difficulty == "Easy":
         return 1, 20
@@ -29,7 +29,7 @@ def parse_guess(raw: str):
 
     return True, value, None
 
-# fixed 
+# fixed changed the if statements to return the correct output
 def check_guess(guess, secret):
     if guess == secret:
         return "Win", "🎉 Correct!"
