@@ -25,9 +25,29 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+**Game purpose:** A number guessing game where the player tries to guess a randomly chosen secret number within a set number of attempts. Each wrong guess provides a hint (go higher or lower), and the score is based on how few attempts it took to win.
+
+**Bugs found:**
+
+1. **Secret number reset on every rerun** — `random.randint()` was called unconditionally at the top level, so every button click generated a new secret.
+2. **Hints were inverted** — `check_guess` returned "Go HIGHER!" when the guess was too high and "Go LOWER!" when it was too low.
+3. **Normal and Hard difficulty ranges were swapped** — Normal returned 1–100 and Hard returned 1–50; it should be the opposite.
+4. **New Game button didn't work** — clicking it reset the secret but never reset `status` back to `"playing"`, so the game immediately stopped again on rerun.
+5. **Score went negative** — wrong guesses subtracted 5 points, and "Too High" on even attempts added 5, making scoring inconsistent and allowing negative scores.
+6. **Attempts counter showed stale data** — the `st.info()` block rendered before the submit logic ran, so on the final guess the counter said "1 attempt left" while the bottom said "Out of attempts."
+7. **Difficulty change didn't update the secret or range** — the secret was only guarded by `if "secret" not in st.session_state`, so switching difficulty had no effect.
+8. **Out-of-range inputs counted as attempts** — entering a number outside the difficulty range wasted an attempt with no feedback.
+
+**Fixes applied:**
+
+1. Wrapped secret generation in `if "secret" not in st.session_state` and added a difficulty-change check that resets the game state when difficulty switches.
+2. Swapped the hint messages in `check_guess` so `guess > secret` → "Go LOWER!" and `guess < secret` → "Go HIGHER!".
+3. Corrected `get_range_for_difficulty`: Normal → 1–50, Hard → 1–100.
+4. Added `st.session_state.status = "playing"` and history clear to the New Game handler.
+5. Removed the point-subtraction logic from `update_score`; score only changes on a win.
+6. Replaced `st.info()` and the debug panel with `st.empty()` placeholders filled after the submit block, so they always reflect the post-submission state.
+7. Added difficulty tracking in session state; changing difficulty now resets the secret, attempts, and history.
+8. Added range validation using `is_in_range()` from `logic_utils`; out-of-range inputs show an error and do not increment the attempt counter.
 
 ## 📸 Demo
 
