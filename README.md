@@ -54,5 +54,5 @@ It wrote the code, ran away, and now the game is unplayable.
 -  <img width="2525" height="1349" alt="shot-1772685126" src="https://github.com/user-attachments/assets/4a27add8-73f9-4eb6-abd5-ee886a4f0f84" />
 
 ## 🚀 Stretch Features
+ <img width="1205" height="1337" alt="shot-1772686742" src="https://github.com/user-attachments/assets/8614d3f1-f218-4d06-98d2-5b3a10cf458b" />
 
-- [ ] [If you choose to complete Challenge 4, insert a screenshot of your Enhanced Game UI here]
