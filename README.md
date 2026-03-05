@@ -51,7 +51,7 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📸 Demo
 
-- [ ] [<img width="2525" height="1349" alt="shot-1772685126" src="https://github.com/user-attachments/assets/4a27add8-73f9-4eb6-abd5-ee886a4f0f84" />
+-  [<img width="2525" height="1349" alt="shot-1772685126" src="https://github.com/user-attachments/assets/4a27add8-73f9-4eb6-abd5-ee886a4f0f84" />
 ]
 
 ## 🚀 Stretch Features
