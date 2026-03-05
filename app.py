@@ -15,6 +15,7 @@ import streamlit as st
 from logic_utils import (
     check_guess,
     get_range_for_difficulty,
+    get_temperature_feedback,
     is_in_range,
     parse_guess,
     update_score,
@@ -113,9 +114,22 @@ if submit:
         st.session_state.history.append(guess_int)
 
         outcome, message = check_guess(guess_int, st.session_state.secret)
+        
+        # Get temperature feedback
+        temp_level, temp_emoji, temp_color = get_temperature_feedback(
+            guess_int, st.session_state.secret, high - low
+        )
 
         if show_hint:
+            # Display direction hint
             st.warning(message)
+            
+            # Display temperature feedback with color coding
+            if outcome != "Win":
+                st.markdown(
+                    f":{temp_color}[**{temp_emoji} {temp_level}** - "
+                    f"You're getting closer!]"
+                )
 
         st.session_state.score = update_score(
             current_score=st.session_state.score,
@@ -144,6 +158,41 @@ info_placeholder.info(
     f"Guess a number between {low} and {high}. "
     f"Attempts left: {attempt_limit - st.session_state.attempts}"
 )
+
+# Display game session summary table
+if st.session_state.history:
+    st.divider()
+    st.subheader("📊 Game Session Summary")
+    
+    # Create data for the summary table
+    summary_data = []
+    for idx, guess in enumerate(st.session_state.history, 1):
+        outcome, direction = check_guess(guess, st.session_state.secret)
+        temp_level, temp_emoji, _ = get_temperature_feedback(
+            guess, st.session_state.secret, high - low
+        )
+        
+        summary_data.append({
+            "Attempt": f"#{idx}",
+            "Guess": guess,
+            "Direction": direction,
+            "Temperature": f"{temp_emoji} {temp_level}"
+        })
+    
+    # Display as table
+    import pandas as pd
+    df = pd.DataFrame(summary_data)
+    st.dataframe(df, use_container_width=True, hide_index=True)
+    
+    # Display summary metrics
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Total Attempts", st.session_state.attempts)
+    with col2:
+        st.metric("Current Score", st.session_state.score)
+    with col3:
+        remaining = attempt_limit - st.session_state.attempts
+        st.metric("Attempts Left", remaining)
 
 with debug_placeholder.expander("Developer Debug Info"):
     st.write("Secret:", st.session_state.secret)

@@ -177,3 +177,46 @@ def update_score(current_score: int, outcome: str,
             points = 10
         return current_score + points
     return current_score
+
+
+def get_temperature_feedback(guess: int, secret: int, 
+                             range_size: int) -> tuple[str, str, str]:
+    """Get temperature-based feedback on how close the guess is to the secret.
+
+    Provides a "hot/cold" style feedback with emoji, color, and descriptive
+    text based on the distance between the guess and the secret number.
+
+    Args:
+        guess: The player's guessed number.
+        secret: The secret number to match.
+        range_size: The total range of possible numbers (high - low).
+
+    Returns:
+        A tuple containing:
+            - temperature (str): Temperature level ('Freezing', 'Cold', 
+              'Warm', 'Hot', 'On Fire!').
+            - emoji (str): Visual emoji representing temperature.
+            - color (str): Streamlit color for styling ('blue', 'green', 
+              'orange', 'red').
+
+    Examples:
+        >>> get_temperature_feedback(50, 75, 100)
+        ('Warm', '🔥', 'orange')
+        >>> get_temperature_feedback(10, 75, 100)
+        ('Freezing', '🧊', 'blue')
+    """
+    distance = abs(guess - secret)
+    percentage = (distance / range_size) * 100 if range_size > 0 else 0
+    
+    if distance == 0:
+        return "Perfect!", "🎯", "green"
+    elif percentage <= 5:  # Within 5% of range
+        return "On Fire!", "🔥🔥🔥", "red"
+    elif percentage <= 15:  # Within 15% of range
+        return "Hot", "🔥", "orange"
+    elif percentage <= 30:  # Within 30% of range
+        return "Warm", "♨️", "orange"
+    elif percentage <= 50:  # Within 50% of range
+        return "Cold", "❄️", "blue"
+    else:  # More than 50% away
+        return "Freezing", "🧊", "blue"
