@@ -68,3 +68,9 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
   - This could be a testing habit, a prompting strategy, or a way you used Git.
 - What is one thing you would do differently next time you work with AI on a coding task?
 - In one or two sentences, describe how this project changed the way you think about AI generated code.
+
+1. Definitely test and see if the code works as it should in the app, then review the code if it doesnt and see where the logic messed up and how to move on from there. Another thing is adding comments to bugs I have found, I really need that for more organization
+
+2. One thing I would do differently based on how I approached this assignment, is not to blindly follow AI. I think this project showed exactly how to use it and how to test it.
+
+3.It changed the way I think by allowing me to actually review the code, logic, and go and test it whether thats manually or with pytest. I want to see the behavior of the code it gives me align with the way I think and know it should behave. 
