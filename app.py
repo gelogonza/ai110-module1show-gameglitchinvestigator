@@ -1,54 +1,24 @@
+"""Number Guessing Game - Streamlit Application.
+
+A web-based number guessing game where players attempt to guess a randomly
+generated secret number within a limited number of attempts. Features multiple
+difficulty levels, real-time feedback, score tracking, and guess history.
+
+The game provides directional hints (higher/lower) and validates input to
+ensure a fair and enjoyable gameplay experience.
+"""
+
 import random
+
 import streamlit as st
-from logic_utils import is_in_range
 
-# fixed changed the hard and normal to be be the correct ranges
-def get_range_for_difficulty(difficulty: str):
-    if difficulty == "Easy":
-        return 1, 20
-    if difficulty == "Normal":
-        return 1, 50
-    if difficulty == "Hard":
-        return 1, 100
-    return 1, 50
-
-
-def parse_guess(raw: str):
-    if raw is None:
-        return False, None, "Enter a guess."
-
-    if raw == "":
-        return False, None, "Enter a guess."
-
-    try:
-        if "." in raw:
-            value = int(float(raw))
-        else:
-            value = int(raw)
-    except Exception:
-        return False, None, "That is not a number."
-
-    return True, value, None
-
-# fixed changed the if statements to return the correct output
-def check_guess(guess, secret):
-    if guess == secret:
-        return "Win", "🎉 Correct!"
-
-    if guess > secret:
-        return "Too High", "📉 Go LOWER!"
-    else:
-        return "Too Low", "📈 Go HIGHER!"
-
-# fix: refactored score updating logic by using Copilot Ask mode
-def update_score(current_score: int, outcome: str, attempt_number: int):
-    if outcome == "Win":
-        points = 100 - 10 * (attempt_number + 1)
-        if points < 10:
-            points = 10
-        return current_score + points
-
-    return current_score
+from logic_utils import (
+    check_guess,
+    get_range_for_difficulty,
+    is_in_range,
+    parse_guess,
+    update_score,
+)
 
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
 
@@ -78,7 +48,8 @@ st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 if "difficulty" not in st.session_state:
     st.session_state.difficulty = difficulty
 
-if "secret" not in st.session_state or st.session_state.difficulty != difficulty:
+if ("secret" not in st.session_state or
+        st.session_state.difficulty != difficulty):
     st.session_state.secret = random.randint(low, high)
     st.session_state.difficulty = difficulty
     st.session_state.attempts = 0
@@ -125,14 +96,18 @@ if st.session_state.status != "playing":
     else:
         st.error("Game over. Start a new game to try again.")
     st.stop()
-# fix: added range validation to check if input is within range
+
+# Process submitted guess
 if submit:
     ok, guess_int, err = parse_guess(raw_guess)
 
     if not ok:
         st.error(err)
     elif not is_in_range(guess_int, low, high):
-        st.error(f"{guess_int} isn't within range. Please enter a number between {low} and {high}.")
+        st.error(
+            f"{guess_int} isn't within range. "
+            f"Please enter a number between {low} and {high}."
+        )
     else:
         st.session_state.attempts += 1
         st.session_state.history.append(guess_int)
@@ -163,7 +138,8 @@ if submit:
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
-# fixed
+
+# Update status display
 info_placeholder.info(
     f"Guess a number between {low} and {high}. "
     f"Attempts left: {attempt_limit - st.session_state.attempts}"
