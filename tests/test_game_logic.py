@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from logic_utils import check_guess, get_range_for_difficulty, update_score, parse_guess
+from logic_utils import check_guess, get_range_for_difficulty, update_score, parse_guess, is_in_range
 
 
 # --- check_guess: hints were swapped (bug: Too High said "Go HIGHER", Too Low said "Go LOWER") ---
@@ -104,3 +104,30 @@ def test_parse_decimal_truncates():
     ok, value, _ = parse_guess("7.9")
     assert ok is True
     assert value == 7
+
+
+# --- is_in_range: out-of-range guesses should be rejected without costing an attempt ---
+
+def test_guess_at_lower_bound_is_valid():
+    assert is_in_range(1, 1, 20) is True
+
+def test_guess_at_upper_bound_is_valid():
+    assert is_in_range(20, 1, 20) is True
+
+def test_guess_within_range_is_valid():
+    assert is_in_range(10, 1, 20) is True
+
+def test_guess_above_range_is_invalid():
+    # e.g. guessing 21 on Easy (1-20) should be rejected
+    assert is_in_range(21, 1, 20) is False
+
+def test_guess_below_range_is_invalid():
+    assert is_in_range(0, 1, 20) is False
+
+def test_guess_out_of_range_normal():
+    # Normal is 1-50, so 51 should be rejected
+    assert is_in_range(51, 1, 50) is False
+
+def test_guess_out_of_range_hard():
+    # Hard is 1-100, so 101 should be rejected
+    assert is_in_range(101, 1, 100) is False

@@ -32,6 +32,11 @@ def parse_guess(raw: str):
     return True, value, None
 
 
+def is_in_range(guess: int, low: int, high: int) -> bool:
+    """Return True if guess is within [low, high] inclusive."""
+    return low <= guess <= high
+
+
 def check_guess(guess, secret):
     """
     Compare guess to secret and return (outcome, message).
